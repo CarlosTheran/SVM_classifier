@@ -2,4 +2,4 @@
 
 ![](CAWT.png)
 
-_This repository provide an base code to analyze data using support vector machine. In order to run the code please install the following [requerements](https://github.com/CarlosTheran/SVM_classifier/blob/master/requerements.txt)_
+_This repository provides an base code to analyze data using support vector machine. In order to run the code please install the following [requerements](https://github.com/CarlosTheran/SVM_classifier/blob/master/requerements.txt)_
