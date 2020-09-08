@@ -13,7 +13,7 @@ python dl_regressors.py --config_file sample/sample-run.config
 *The following files must to be store into their corresponding folder to execute the code [Elemnet](https://github.com/CarlosTheran/ElemNet) on a cloud platform using spark*
 
 1. data_utils.py must be copy into the folder [elemnet](https://github.com/CarlosTheran/ElemNet/tree/master/elemnet)
-2. dl_regressors.py must be copy into the folder [elemnet](https://github.com/CarlosTheran/ElemNet/tree/master/elemnet)
+2. dl_regressors_svm_spark.py must be copy into the folder [elemnet](https://github.com/CarlosTheran/ElemNet/tree/master/elemnet)
 3. sample-run.config must be copy into the folder [samples](https://github.com/CarlosTheran/ElemNet/tree/master/elemnet/sample)
 
 All these file must replace the original ones. Once these files have been copied you must to run the code using the following command.
