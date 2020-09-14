@@ -3,7 +3,7 @@ import os
 import re
 import sys
 from collections import defaultdict
-
+import pdb
 import numpy
 import pandas
 import sklearn.preprocessing
@@ -32,7 +32,8 @@ elements_tl = ['H', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Na', 'Mg', 'Al', 'Si',
 
 
 
-phys_atts = ['0-norm', '2-norm', '3-norm', '5-norm', '7-norm', '10-norm', 'minimum Number', 'maximum Number', 'range Number', 'mean $input_atts = {'elements':elements, 'elements_tl':elements_tl, 'physical_atts': phys_atts}
+phys_atts = ['0-norm', '2-norm', '3-norm', '5-norm', '7-norm', '10-norm', 'minimum Number', 'maximum Number', 'range Number', 'mean Number', 'avg_dev Number', 'mode Number', 'minimum MendeleevNumber', 'maximum MendeleevNumber', 'range MendeleevNumber', 'mean MendeleevNumber', 'avg_dev MendeleevNumber', 'mode MendeleevNumber', 'minimum AtomicWeight', 'maximum AtomicWeight', 'range AtomicWeight', 'mean AtomicWeight', 'avg_dev AtomicWeight', 'mode AtomicWeight', 'minimum MeltingT', 'maximum MeltingT', 'range MeltingT', 'mean MeltingT', 'avg_dev MeltingT', 'mode MeltingT', 'minimum Column', 'maximum Column', 'range Column', 'mean Column', 'avg_dev Column', 'mode Column', 'minimum Row', 'maximum Row', 'range Row', 'mean Row', 'avg_dev Row', 'mode Row', 'minimum CovalentRadius', 'maximum CovalentRadius', 'range CovalentRadius', 'mean CovalentRadius', 'avg_dev CovalentRadius', 'mode CovalentRadius', 'minimum Electronegativity', 'maximum Electronegativity', 'range Electronegativity', 'mean Electronegativity', 'avg_dev Electronegativity', 'mode Electronegativity', 'minimum NsValence', 'maximum NsValence', 'range NsValence', 'mean NsValence', 'avg_dev NsValence', 'mode NsValence', 'minimum NpValence', 'maximum NpValence', 'range NpValence', 'mean NpValence', 'avg_dev NpValence', 'mode NpValence', 'minimum NdValence', 'maximum NdValence', 'range NdValence', 'mean NdValence', 'avg_dev NdValence', 'mode NdValence', 'minimum NfValence', 'maximum NfValence', 'range NfValence', 'mean NfValence', 'avg_dev NfValence', 'mode NfValence', 'minimum NValence', 'maximum NValence', 'range NValence', 'mean NValence', 'avg_dev NValence', 'mode NValence', 'minimum NsUnfilled', 'maximum NsUnfilled', 'range NsUnfilled', 'mean NsUnfilled', 'avg_dev NsUnfilled', 'mode NsUnfilled', 'minimum NpUnfilled', 'maximum NpUnfilled', 'range NpUnfilled', 'mean NpUnfilled', 'avg_dev NpUnfilled', 'mode NpUnfilled', 'minimum NdUnfilled', 'maximum NdUnfilled', 'range NdUnfilled', 'mean NdUnfilled', 'avg_dev NdUnfilled', 'mode NdUnfilled', 'minimum NfUnfilled', 'maximum NfUnfilled', 'range NfUnfilled', 'mean NfUnfilled', 'avg_dev NfUnfilled', 'mode NfUnfilled', 'minimum NUnfilled', 'maximum NUnfilled', 'range NUnfilled', 'mean NUnfilled', 'avg_dev NUnfilled', 'mode NUnfilled', 'minimum GSvolume_pa', 'maximum GSvolume_pa', 'range GSvolume_pa', 'mean GSvolume_pa', 'avg_dev GSvolume_pa', 'mode GSvolume_pa', 'minimum GSbandgap', 'maximum GSbandgap', 'range GSbandgap', 'mean GSbandgap', 'avg_dev GSbandgap', 'mode GSbandgap', 'minimum GSmagmom', 'maximum GSmagmom', 'range GSmagmom', 'mean GSmagmom', 'avg_dev GSmagmom', 'mode GSmagmom', 'minimum SpaceGroupNumber', 'maximum SpaceGroupNumber', 'range SpaceGroupNumber', 'mean SpaceGroupNumber', 'avg_dev SpaceGroupNumber', 'mode SpaceGroupNumber', 'avg s valence electrons', 'avg p valence electrons', 'avg d valence electrons', 'avg f valence electrons', 'compound possible', 'max ionic char', 'avg ionic char']
+input_atts = {'elements':elements, 'elements_tl':elements_tl, 'physical_atts': phys_atts}
 
 elem_pos = dict()
 i=0
@@ -46,7 +47,7 @@ for el in elements:
 
 
 def parse_fractions(form):
-    while '/' in form:
+   while '/' in form:
         di = form.index('/')
         num1 = [x for x in re.findall(r'\d*\.*\d*', form[:di]) if x != ''][-1]
         # print num1, 'x2 is:',x[di+1:]
@@ -54,11 +55,11 @@ def parse_fractions(form):
         # print x, 'num1:', num1, 'num2:', num2, 'xdi:', form[:di], 'xdi2:', form[di+1:]
         fract = '%.3f' % (float(num1) / float(num2))
         form = form[:di - len(num1)] + fract + form[di + len(num2) + 1:]
-	return form
+        return form
 
 #parse_fractions('Mg1/3Ta2/3')
 
-def parse_formula(formula):
+   def parse_formula(formula):
         # print x,
         x = parse_fractions(x)
         # print x
@@ -72,7 +73,7 @@ def parse_formula(formula):
         # print x, formula_dict
         return formula_dict
 
-    while i < len(formula):
+   while i < len(formula):
         # print 'curr:', formula[i], 'stac:', stack, res, ' form:', formula[i:]
         if formula[i] not in ['(', ')'] and not stack:
             curr_str = ''
@@ -107,7 +108,9 @@ def parse_formula(formula):
             stack.pop()
             curr_str = curr_str[::-1]
             fract1 = re.findall(r'\d*\.*\d*', curr_str)[0]
-            if not len(fract1):            else:
+            if not len(fract1):
+                fract *=1
+            else:
                 fract *= float(fract1)
             curr_str = curr_str[len(fract1):]
             temp_res = parse_simple_formula(curr_str)
@@ -124,11 +127,11 @@ def parse_formula(formula):
                     stack.append(i)
                     stack.append(v)
     # print 'final:', formula, res
-    if any([e for e in res if e in ['T', 'D', 'G', 'M', 'Q']]):
+   if any([e for e in res if e in ['T', 'D', 'G', 'M', 'Q']]):
         print (formula, res)
-    sum_nums = 1. * sum(res.values())
-    for k in res: res[k] = 1. * res[k] / sum_nums
-    return res
+   sum_nums = 1. * sum(res.values())
+   for k in res: res[k] = 1. * res[k] / sum_nums
+   return res
 
 def get_fractions(comp):
     #print comp
@@ -140,17 +143,19 @@ def load_csv(train_data_path, test_data_path=None, input_types = None, label =No
     assert logger is not None
     logger.fprint('train data path is ', train_data_path)
     data_f_sql = sparkSession.read.csv(train_data_path,inferSchema = True, header = True)
-    data_f = data_f_sql.toPandas()
+    data_f_np = numpy.array(data_f_sql.select(data_f_sql.columns).collect())
+    data_f = pandas.DataFrame(data_f_np)
     logger.fprint('input attribute sets are: ', input_types)
     if test_data_path:
         logger.fprint('test data path is ', test_data_path)
         data_ft_sql = sparkSession.read.csv(test_data_path,inferSchema = True, header = True)
-        data_ft = data_ft_sql.toPandas()
+        data_ft_np = numpy.array(data_ft_sql.select(data_ft_sql.columns).collect())
+        data_ft = pandas.DataFrame(data_ft_np)
     elif test_size:
         logger.fprint('splitting data into with test ratio=', test_size)
         data_f, data_ft = train_test_split(data_f, test_size=test_size, random_state=12345)
     else:
-        data_ft = pd.DataFrame(columns=data_f.columns)
+        data_ft = p.DataFrame(columns=data_f.columns)
     if val_size>0:
         data_fv = train_test_split(data_f, val_size=val_size, random_state=12345)
     else:
@@ -206,7 +211,7 @@ def load_csv(train_data_path, test_data_path=None, input_types = None, label =No
     valid_X = data_fv[input_attributes].values
     valid_y = data_fv[label].values
     logger.fprint(data_fv.describe())
-    logger.fprint(' train, test, valid sizes: ', train_X.shape, train_y.shape, test_X.shape, test_y.shape, valid_X.shape, valid_y.sh$
+    logger.fprint(' train, test, valid sizes: ', train_X.shape, train_y.shape, test_X.shape, test_y.shape, valid_X.shape, valid_y.shape)
     return train_X, train_y, valid_X, valid_y, test_X, test_y
 
 
